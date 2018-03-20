@@ -520,6 +520,66 @@ if simple_plot==1
 end
 
 if daily_plotter==1
+    if plot2==1
+        daily_plot_fig=figure('rend','painters','pos',[100 100 1300 1200]);
+      background_color=get(daily_plot_fig,'Color');
+      
+      for chan = 1:(chan_num) %ASSUME THERE IS A NOISE CHANNEL HERE SO ONLY PLOT 1-20 TO EXCLUDE NOISE CHANNEL
+          if chan > 20
+              msgbox('GUI does not currently support more than 20 channels')
+          else
+              subplot(5,4,chan)
+              if use_freq==1
+                  %plot(handles.data{1,selected_day}{chan_map(1,chan),1}(str2num(frequency_input),2),handles.data{1,selected_day}{chan_map(1,chan),1}(str2num(frequency_input),3),'Color','k','Marker','+','LineStyle','--','LineWidth',2)
+                  scatter(handles.data{1,selected_day}{chan_map(1,chan),1}(str2num(frequency_input),1),handles.data{1,selected_day}{chan_map(1,chan),1}(str2num(frequency_input),4),'MarkerFaceColor','k','MarkerEdgeColor','k','Marker','+')
+              else
+                  %plot(handles.data{1,selected_day}{chan_map(1,chan),1}(str2num(maxfreqrange),2),handles.data{1,selected_day}{chan_map(1,chan),1}(str2num(maxfreqrange),3),'Color','k','Marker','+','LineStyle','--','LineWidth',2)
+                  scatter(handles.data{1,selected_day}{chan_map(1,chan),1}(str2num(maxfreqrange),1),handles.data{1,selected_day}{chan_map(1,chan),1}(str2num(maxfreqrange),4),'MarkerFaceColor','k','MarkerEdgeColor','k','Marker','+')
+              end
+              grid on
+              grid minor
+              title(['Site ', num2str(chan)]);
+              set(gca,'YScale','log');
+              set(gca,'XScale','log');
+              hold on
+              axis([1e-1 1e5 1e3 1e10]);
+
+
+    %           
+    %         freq_vector=handles.data{1,1}{1,1}(:,1);
+    %         freq_difference=abs(freq_vector-1000);
+    %         [dif_mag,dif_loc]=min(freq_difference);
+    %         nearest_freq=num2str(freq_vector(dif_loc));
+    %         
+    %         nearest_magnitude=handles.data{1,selected_day}{chan_map(1,chan),1}(dif_loc,3);
+    %         nearest_rounded=round(nearest_magnitude);
+    %         num_str=addvilgole2(nearest_rounded);
+    %         x_string=sprintf('%s Hz Imp Mag: %s Ohms',num2str(nearest_freq),num_str);
+    %         xlabel(x_string)
+    %         
+    %         hold on
+    %         scatter(handles.data{1,selected_day}{chan_map(1,chan),1}(dif_loc,2),handles.data{1,selected_day}{chan_map(1,chan),1}(dif_loc,3),'MarkerFaceColor','k','MarkerEdgeColor','r','Marker','d','LineWidth',3)  
+         end
+       end
+    
+      %your subplot
+    h = axes('Position',[0 0 1 1],'Visible','off'); %add an axes on the left side of your subplots
+    set(gcf,'CurrentAxes',h)
+    text(.1,.45,'-X (\Omega)',...
+    'VerticalAlignment','bottom',...
+    'HorizontalAlignment','left', 'Rotation', 90, 'FontSize',14)
+    
+    text(.5,.02,'R (\Omega)',...
+    'VerticalAlignment','bottom',...
+    'HorizontalAlignment','center', 'FontSize',14)
+
+    suptitle_string=sprintf('Day: %s Impedance Recording',num2str(selected_day-1));
+    text(.5,1,suptitle_string,...
+    'VerticalAlignment','Top',...
+    'HorizontalAlignment','center', 'FontSize',14)
+        
+        
+    else
       daily_plot_fig=figure('rend','painters','pos',[100 100 1300 1200]);
       background_color=get(daily_plot_fig,'Color');
       
@@ -569,7 +629,7 @@ if daily_plotter==1
     text(.5,1,suptitle_string,...
     'VerticalAlignment','Top',...
     'HorizontalAlignment','center', 'FontSize',14)
-      
+    end  
 end
 
 if simple_plot == 0 && daily_plotter==0
