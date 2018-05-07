@@ -102,12 +102,21 @@ end
 
 if strcmp(import_type,'input_text')==1
 
-
+if isfield(handles,'path') == 1
+    [filenames, pathname, filterindex] = uigetfile( ...
+    {  '*.txt','Autolab Text Files (*.txt)'; ...
+       '*.*',  'All Files (*.*)'}, ...
+       'Pick a file', ...
+       handles.path, ...
+       'MultiSelect', 'on');
+else
     [filenames, pathname, filterindex] = uigetfile( ...
     {  '*.txt','Autolab Text Files (*.txt)'; ...
        '*.*',  'All Files (*.*)'}, ...
        'Pick a file', ...
        'MultiSelect', 'on');
+end
+
 
     set(handles.listbox1,'String',filenames);
 
@@ -147,8 +156,8 @@ if strcmp(import_type,'input_text')==1
     % eval(eval_command);
 
     handles.data_storage=data_storage;
-    handles.input_id=input_id;
-    handles.input_day=input_day;
+    handles.saved_input_id=input_id;
+    handles.saved_input_day=input_day;
     handles.input_channels=filenum;
     handles.filenames=filenames;
     handles.path=pathname;
@@ -166,7 +175,7 @@ function input_id_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of input_id as text
 %        str2double(get(hObject,'String')) returns contents of input_id as a double
-
+guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
 function input_id_CreateFcn(hObject, eventdata, handles)
@@ -310,10 +319,28 @@ input_phase=str2num(input_phase);
 
 input_merge=get(handles.input_merge,'Value');
 
+input_id=get(handles.input_id,'string');
+if iscell(input_id)==1
+   input_id=input_id{1,1}; 
+end
+
+input_day=get(handles.input_day,'string');
+if iscell(input_day)==1
+   input_day=input_day{1,1}; 
+end
+
+input_startrow=get(handles.input_startrow,'string');
+if iscell(input_startrow)==1
+   input_startrow=input_startrow{1,1}; 
+end
+
+input_delimiter=get(handles.input_delimiter,'string');
+if iscell(input_delimiter)==1
+   input_delimiter=input_delimiter{1,1}; 
+end
+
 pathname=handles.path;
 data_storage=handles.data_storage;
-input_id=handles.input_id;
-input_day=handles.input_day;
 input_channels=handles.input_channels;
 
 writepath = uigetdir(pathname);
