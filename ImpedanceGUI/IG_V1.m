@@ -22,7 +22,7 @@ function varargout = IG_V1(varargin)
 
 % Edit the above text to modify the response to help IG_V1
 
-% Last Modified by GUIDE v2.5 13-Mar-2018 13:01:46
+% Last Modified by GUIDE v2.5 08-May-2018 15:51:18
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -58,6 +58,7 @@ handles.previous_figure_zz=0;
 handles.previous_figure_im=0;
 handles.previous_figure_ph=0;
 handles.previous_figure_avgimp=0;
+
 
 % Update handles structure
 guidata(hObject, handles);
@@ -543,6 +544,7 @@ if daily_plotter==1
               set(gca,'XScale','log');
               hold on
               axis([1e-1 1e5 1e3 1e10]);
+              
 
 
     %           
@@ -580,14 +582,15 @@ if daily_plotter==1
         
         
     else
+      track_error=0;
       daily_plot_fig=figure('rend','painters','pos',[100 100 1300 1200]);
       background_color=get(daily_plot_fig,'Color');
       
       for chan = 1:(chan_num) %ASSUME THERE IS A NOISE CHANNEL HERE SO ONLY PLOT 1-20 TO EXCLUDE NOISE CHANNEL
           if chan > 20
-              msgbox('GUI does not currently support more than 20 channels')
-              return;
+              track_error=1;
           end
+          if track_error==0
           subplot(5,4,chan)
           if use_freq==1
               %plot(handles.data{1,selected_day}{chan_map(1,chan),1}(str2num(frequency_input),2),handles.data{1,selected_day}{chan_map(1,chan),1}(str2num(frequency_input),3),'Color','k','Marker','+','LineStyle','--','LineWidth',2)
@@ -612,6 +615,7 @@ if daily_plotter==1
         
         hold on
         scatter(handles.data{1,selected_day}{chan_map(1,chan),1}(dif_loc,2),handles.data{1,selected_day}{chan_map(1,chan),1}(dif_loc,3),'MarkerFaceColor','k','MarkerEdgeColor','r','Marker','d','LineWidth',3)  
+          end
       end
     
       %your subplot
@@ -626,9 +630,11 @@ if daily_plotter==1
     'HorizontalAlignment','center', 'FontSize',14)
 
     suptitle_string=sprintf('Day: %s Impedance Recording',num2str(selected_day-1));
-    text(.5,1,suptitle_string,...
+    text(.5,1,get(handles.equal_title_input,'String'),...
     'VerticalAlignment','Top',...
     'HorizontalAlignment','center', 'FontSize',14)
+
+
     end  
 end
 
@@ -796,6 +802,13 @@ end
     
     
 end
+
+xlims=xlim;
+set(handles.xmin,'String',num2str(xlims(1,1)));
+set(handles.xmax,'String',num2str(xlims(1,2)));
+ylims=ylim;
+set(handles.ymin,'String',num2str(ylims(1,1)));
+set(handles.ymax,'String',num2str(ylims(1,2)));
 
 
 
@@ -1379,3 +1392,166 @@ for i=1:size(strnum2,2)
   strnumnew=num;    
   end
 %end function
+
+
+
+function xmax_Callback(hObject, eventdata, handles)
+% hObject    handle to xmax (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of xmax as text
+%        str2double(get(hObject,'String')) returns contents of xmax as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function xmax_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to xmax (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function xmin_Callback(hObject, eventdata, handles)
+% hObject    handle to xmin (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of xmin as text
+%        str2double(get(hObject,'String')) returns contents of xmin as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function xmin_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to xmin (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function ymax_Callback(hObject, eventdata, handles)
+% hObject    handle to ymax (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of ymax as text
+%        str2double(get(hObject,'String')) returns contents of ymax as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function ymax_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to ymax (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function ymin_Callback(hObject, eventdata, handles)
+% hObject    handle to ymin (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of ymin as text
+%        str2double(get(hObject,'String')) returns contents of ymin as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function ymin_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to ymin (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in apply_limits.
+function apply_limits_Callback(hObject, eventdata, handles)
+% hObject    handle to apply_limits (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+selected_figure=get(handles.figurelist,'Value');
+figure(handles.storedfigures(selected_figure,1));
+xmin=str2num(get(handles.xmin,'String'));
+xmax=str2num(get(handles.xmax,'String'));
+ymin=str2num(get(handles.ymin,'String'));
+ymax=str2num(get(handles.ymax,'String'));
+
+xlim([xmin xmax]);
+ylim([ymin ymax]);
+
+
+% --- Executes on selection change in figurelist.
+function figurelist_Callback(hObject, eventdata, handles)
+% hObject    handle to figurelist (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns figurelist contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from figurelist
+selected_figure=get(handles.figurelist,'Value');
+if selected_figure ~= 1 
+    figure(handles.storedfigures(selected_figure,1));
+    xlims=xlim;
+    set(handles.xmin,'String',num2str(xlims(1,1)));
+    set(handles.xmax,'String',num2str(xlims(1,2)));
+    ylims=ylim;
+    set(handles.ymin,'String',num2str(ylims(1,1)));
+    set(handles.ymax,'String',num2str(ylims(1,2)));
+end
+guidata(hObject, handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function figurelist_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to figurelist (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: listbox controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in update_figurelist.
+function update_figurelist_Callback(hObject, eventdata, handles)
+% hObject    handle to update_figurelist (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set(handles.figurelist,'Value',1);
+figurelist=findall(0,'type','figure');
+figurenum=length(figurelist);
+for i = 1:figurenum
+    fignames{i,1}=figurelist(i,1).Name;
+    if strcmp(fignames{i,1},'')==1
+        newname=sprintf('Figure %s',num2str(figurelist(i,1).Number));
+        fignames{i,1}=newname;
+    end
+end
+set(handles.figurelist,'String',fignames);
+handles.storedfigures=figurelist;
+
+guidata(hObject, handles);
